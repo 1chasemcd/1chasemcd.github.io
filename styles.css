@@ -1,0 +1,62 @@
+body {
+  background-color: rgb(220, 220, 220);
+}
+
+/*Navigation Bar*/
+nav.main ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  background-color: rgb(180, 170, 150);
+}
+
+nav.main li {
+  display: inline-block;
+}
+
+nav.main li a {
+  display: block;
+  border-style: none;
+  color: rgb(0, 0, 0);
+  text-align: center;
+  margin: 0;
+  padding: 8px 8px;
+  font-family: "trebuchet ms", sans-serif;
+  text-decoration: none;
+}
+
+li a:hover {
+  background-color: rgb(140, 130, 110);
+}
+
+/*Styles*/
+h1.title {
+  font-size: 100px;
+  color: rgb(0, 0, 0);
+  font-family: "trebuchet ms", sans-serif;
+  text-align: center;
+}
+
+p.text {
+  font-size: 20px;
+  color: rgb(0, 0, 0);
+  font-family: "trebuchet ms", sans-serif;
+  text-align: center;
+}
+
+figure img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+figure figcaption {
+  display: block;
+  text-align: center;
+  font-size: 10px;
+}
+
+iframe.more {
+  margin-left: auto;
+  margin-right: auto;
+}
