@@ -7,32 +7,77 @@
 
 header {
   background-color: #ffa500;
-  height: 100px;
+  height: 120px;
   margin: 1vw;
 }
 
 .headImg {
   float: left;
-  width: 120px;
+  width: 100px;
   padding: 10px;
 }
 
-h1 {
+h1.largeScreen {
+  font-family: "pt sans", sans;
+  color: #ffffff;
   float: left;
-  padding: 10px;
+  margin-top: 40px;
 }
 
-h4 {
+h1.smallScreen {
+  font-family: "pt sans", sans;
+  color: #ffffff;
   float: left;
-  padding: 10px;
+  margin-top: 40px;
+  display: none;
+}
+
+@media only screen and (max-width: 7in){
+  h1.largeScreen {
+    display: none;
+  }
+
+  h1.smallScreen {
+    display: block;
+  }
+}
+
+@media only screen and (max-width: 4.5in){
+
+  h1.smallScreen {
+    display: none;
+  }
+
+  .headImg {
+    float: none;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+h2 {
+  font-family: "pt sans", sans;
+  color: #ffffff;
+}
+
+h3 {
+  font-family: "pt sans", sans;
+  color: #ffffff;
+  text-align: center;
+}
+
+p {
+  font-family: "pt sans", sans;
+  color: #ffffff;
 }
 
 body {
   background-color: #5dcfc3;
 }
 
-div.intro {
-  height: 45vw;
+.section {
+  height: 75vh;
   margin: 1vw;
   background-color: #ffa500;
 }
@@ -43,9 +88,15 @@ div.column {
   height: 88%;
 }
 
-div.row {
+div.row1 {
   margin: 2vw;
-  height: 50%;
+  height: calc(73vh - 24vw);
+  background-color: #a2000c;
+}
+
+div.row2 {
+  margin: 2vw;
+  height: 20vw;
   background-color: #a2000c;
 }
 
