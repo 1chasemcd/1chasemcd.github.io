@@ -1,7 +1,3 @@
-function openRoute() {
-  location.href='viewroute.html';
-}
-
 window.onload = function() {
   var canvas = document.getElementById("routeCanvas");
   canvas.width = window.innerWidth;
@@ -13,4 +9,7 @@ window.onload = function() {
 
   document.getElementById("inRoute").style.height =
     (window.innerHeight - (window.innerWidth * (900/750)) - 133) + "px";
+
+  document.getElementById("spacer").style.height =
+    (((window.innerHeight - (window.innerWidth * (900/750)) - 133) - 268) / 2) + "px";
 }
