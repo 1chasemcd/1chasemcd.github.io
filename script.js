@@ -1,18 +1,16 @@
-function loadXMLDoc() {
-  var xmlhttp = new XMLHttpRequest();
-  var i = 0;
-  xmlhttp.onreadystatechange = function() {
-    addContent(this);
-  };
-
-  xmlhttp.open("GET", "data.xml", true);
-}
-
-function addContent(xml) {
-  var xmlDoc = xml.responseXML;
-  document.write(xmlDoc.getElementsByTagName("wall")[0].childNodes[0].nodeValue);
-}
-
 function openRoute() {
-    location.href='viewroute.html';
+  location.href='viewroute.html';
+}
+
+window.onload = function() {
+  var canvas = document.getElementById("routeCanvas");
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerWidth * (900/750);
+  var ctx = canvas.getContext("2d");
+  var img = document.getElementById("img");
+  img.style.width = "100px";
+  ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+  document.getElementById("inRoute").style.height =
+    (window.innerHeight - (window.innerWidth * (900/750)) - 133) + "px";
 }

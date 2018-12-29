@@ -1,6 +1,12 @@
-
+/* Body Styles */
+body {
+  margin: 0px;
+}
 /* Nav Bar Styles */
 .topnav {
+  position: fixed;
+  top:0;
+  width: 100%;
   background-color: #000;
   overflow: hidden;
 }
@@ -18,11 +24,15 @@
 
 .arrow {
   float: right;
-  padding: 6px 16px;
+  padding: 3px 16px;
 }
 
 .plus {
   float: right;
+}
+
+.topnav a:active {
+  background-color: #f00;
 }
 
 /* Route div Styles */
@@ -33,7 +43,7 @@
   margin: 16px;
 }
 
-.route h3, h4 {
+h3, h4 {
   font-family: "pt sans";
   margin: 0px;
   color: #fff;
@@ -43,6 +53,12 @@
   font-size: 64px;
 }
 
-.route h4 {
+h4 {
   font-size: 48px;
+}
+
+/* View Route Descriptions */
+.inRoute {
+  background: #f00;
+  overflow: auto;
 }
