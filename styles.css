@@ -1,113 +1,48 @@
-/*
-  Color Scheme: ID 3f31Tw0w0w0w0
-    Blue: #009e8e
-    Yellow: #ffa500
-    Red: #f80012
-*/
 
-header {
-  background-color: #ffa500;
-  height: 120px;
-  margin: 1vw;
+/* Nav Bar Styles */
+.topnav {
+  background-color: #000;
+  overflow: hidden;
 }
 
-.headImg {
+.topnav h2, a {
+  font-family: "pt sans";
+  margin: 0px;
   float: left;
-  width: 100px;
-  padding: 10px;
-}
-
-h1.largeScreen {
-  font-family: "pt sans", sans;
-  color: #ffffff;
-  float: left;
-  margin-top: 40px;
-}
-
-h1.smallScreen {
-  font-family: "pt sans", sans;
-  color: #ffffff;
-  float: left;
-  margin-top: 40px;
-  display: none;
-}
-
-@media only screen and (max-width: 7in){
-  h1.largeScreen {
-    display: none;
-  }
-
-  h1.smallScreen {
-    display: block;
-  }
-}
-
-@media only screen and (max-width: 4.5in){
-
-  h1.smallScreen {
-    display: none;
-  }
-
-  .headImg {
-    float: none;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-  }
-}
-
-h2 {
-  font-family: "pt sans", sans;
-  color: #ffffff;
-}
-
-h3 {
-  font-family: "pt sans", sans;
-  color: #ffffff;
+  color: #fff;
   text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 96px;
 }
 
-p {
-  font-family: "pt sans", sans;
-  color: #ffffff;
+.arrow {
+  float: right;
+  padding: 6px 16px;
 }
 
-body {
-  background-color: #5dcfc3;
+.plus {
+  float: right;
 }
 
-.section {
-  height: 75vh;
-  margin: 1vw;
-  background-color: #ffa500;
+/* Route div Styles */
+.route {
+  background: #f00;
+  overflow: auto;
+  border-radius: 24px;
+  margin: 16px;
 }
 
-div.column {
-  width: 50%;
-  float: left;
-  height: 88%;
+.route h3, h4 {
+  font-family: "pt sans";
+  margin: 0px;
+  color: #fff;
+  text-align: center;
+  padding: 10px;
+  text-decoration: none;
+  font-size: 64px;
 }
 
-div.row1 {
-  margin: 2vw;
-  height: calc(73vh - 24vw);
-  background-color: #a2000c;
-}
-
-div.row2 {
-  margin: 2vw;
-  height: 20vw;
-  background-color: #a2000c;
-}
-
-.img1 {
-  width: 30.5%;
-  float: left;
-  padding: 2%;
-}
-
-.img2 {
-  width: 61%;
-  float: left;
-  padding: 2%;
+.route h4 {
+  font-size: 48px;
 }
