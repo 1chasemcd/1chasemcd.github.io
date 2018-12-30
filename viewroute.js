@@ -1,15 +1,23 @@
 window.onload = function() {
-  var canvas = document.getElementById("routeCanvas");
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerWidth * (900/750);
+  var canvas = document.getElementById("viewcanvas");
+  if (window.innerWidth * (943/700) > window.innerHeight - 120 - 151) {
+    canvas.width = (window.innerHeight - 120 - 151) * (700/943);
+    canvas.height = window.innerHeight - 120 - 151;
+
+  } else {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerWidth * (943/700);
+  }
   var ctx = canvas.getContext("2d");
   var img = document.getElementById("img");
-  img.style.width = "100px";
   ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-  document.getElementById("inRoute").style.height =
-    (window.innerHeight - (window.innerWidth * (900/750)) - 133) + "px";
+  var ypos = 135 + canvas.height
 
-  document.getElementById("spacer").style.height =
-    (((window.innerHeight - (window.innerWidth * (900/750)) - 133) - 268) / 2) + "px";
+  if (ypos > window.innerHeight - 120) {
+    document.getElementById("inroute").style.top = window.innerHeight - 120 + "px";
+
+  } else {
+    document.getElementById("inroute").style.top = 135 + canvas.height + "px";
+  }
 }
