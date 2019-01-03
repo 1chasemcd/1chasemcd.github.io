@@ -13,9 +13,11 @@ window.onload = function() {
     if (window.pageYOffset > stickyY) {
       pullup.classList.add("pullupmove");
       pullup.classList.remove("pullupfixed");
+      document.body.style.backgroundColor = "red";
     } else {
       pullup.classList.remove("pullupmove");
       pullup.classList.add("pullupfixed");
+      document.body.style.backgroundColor = "black";
     }
   }
 }
