@@ -1,6 +1,7 @@
 /* Body Styles */
 body {
   margin: 0px;
+  overscroll-behavior: none;
 }
 /* Nav Bar Styles */
 .topnav {
@@ -57,16 +58,33 @@ h4 {
   font-size: 48px;
 }
 
-/* View Route Descriptions */
+/* View Route Styles */
 .viewcanvas {
-  position: fixed;
-  top: 151px;
-  overflow:visible;
+  display: block;
+  margin-top: 133px;
   z-index: 1;
 }
-.inroute {
-  position: relative;
+.pullupmove, .pullupfixed {
+  border-radius: 24px 24px 0px 0px;
+  margin: auto;
+  width: 100px;
   background: #f00;
-  overflow: auto;
   z-index: 2;
+}
+
+.pullupmove {
+  position: relative;
+  margin-top: -110px;
+}
+
+.pullupfixed {
+  left: calc(50vw - 50px);
+  position: fixed;
+  overflow: hidden;
+  top: calc(100vh - 110px);
+}
+
+.inroute {
+  background: #f00;
+  z-index: 3;
 }
