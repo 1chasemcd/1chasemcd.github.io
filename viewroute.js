@@ -1,4 +1,5 @@
 window.onload = function() {
+  // Setup canvas
   var canvas = document.getElementById("viewcanvas");
   canvas.width = window.innerWidth;
   canvas.height = window.innerWidth * (943/700);
@@ -6,6 +7,7 @@ window.onload = function() {
   var img = document.getElementById("img");
   ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
+  // Code for sticky bottom tab
   var pullup = document.getElementById("pullup");
   var inroute = document.getElementById("inroute");
   var stickyY = inroute.offsetTop - window.innerHeight;
@@ -13,19 +15,19 @@ window.onload = function() {
     if (window.pageYOffset > stickyY) {
       pullup.classList.add("pullupmove");
       pullup.classList.remove("pullupfixed");
-      document.body.style.backgroundColor = "red";
     } else {
       pullup.classList.remove("pullupmove");
       pullup.classList.add("pullupfixed");
-      document.body.style.backgroundColor = "black";
     }
   }
 }
 
+// Return to the main page.
 function openIndex() {
   location.href='index.html';
 }
 
+// Slowly scroll to bottom on tab click.
 function scrollToBottom() {
   window.scroll({
     top: document.body.scrollHeight - window.innerHeight,
