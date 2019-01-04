@@ -12,7 +12,7 @@ body {
   overflow: hidden;
 }
 
-.topnav h2, a {
+.topnav h1, h2 {
   font-family: "pt sans";
   margin: 0px;
   float: left;
@@ -23,17 +23,16 @@ body {
   font-size: 96px;
 }
 
+.topnav h2 {
+  float: right;
+}
+
+.topnav h2:active, {
+  background-color: #444;
+}
+
 .arrow {
-  float: right;
-  padding: 3px 16px;
-}
-
-.plus {
-  float: right;
-}
-
-.topnav a:active {
-  background-color: #f00;
+  padding: 3.5px 16px;
 }
 
 /* Route div Styles */
@@ -42,6 +41,10 @@ body {
   overflow: auto;
   border-radius: 24px;
   margin: 16px;
+}
+
+.route:active {
+  background-color: #a00;
 }
 
 h3, h4 {

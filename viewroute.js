@@ -21,3 +21,15 @@ window.onload = function() {
     }
   }
 }
+
+function openIndex() {
+  location.href='index.html';
+}
+
+function scrollToBottom() {
+  window.scroll({
+    top: document.body.scrollHeight - window.innerHeight,
+    left: 0,
+    behavior: 'smooth'
+  });
+}
