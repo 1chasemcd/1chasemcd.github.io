@@ -12,7 +12,7 @@ body {
 }
 
 .topnav h1, h2 {
-  font-family: "Trebuchet MS";
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
   margin: 0px;
   float: left;
   color: #fff;
@@ -47,7 +47,7 @@ body {
 }
 
 h3, h4 {
-  font-family: "Trebuchet MS";
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
   margin: 0px;
   color: #fff;
   text-align: center;
@@ -69,21 +69,21 @@ h4 {
 .pullupmove, .pullupfixed {
   border-radius: 24px 24px 0px 0px;
   margin: auto;
-  width: 100px;
+  width: 120px;
   background: #f00;
   z-index: 2;
 }
 
 .pullupmove {
   position: relative;
-  margin-top: -110px;
+  margin-top: -49px;
 }
 
 .pullupfixed {
-  left: calc(50vw - 50px);
+  left: calc(50vw - 60px);
   position: fixed;
   overflow: hidden;
-  top: calc(100vh - 110px);
+  top: calc(100vh - 49px);
 }
 
 .inroute {
