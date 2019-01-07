@@ -11,7 +11,7 @@ function setup() {
   var lowDiv = document.getElementById("bottom");
 
   // Setup canvas
-  canvas.style.marginTop = topNav.offsetHeight + "px";
+  canvas.style.marginTop = topNav.offsetHeight - 17 + "px";
   canvas.width = window.innerWidth;
   canvas.height = window.innerWidth * (943/700);
   var ctx = canvas.getContext("2d");

@@ -1,6 +1,7 @@
 /* Body Styles */
 body {
   margin: 0px;
+  overscroll-behavior: none;
 }
 /* Nav Bar Styles */
 .topnav {
@@ -9,6 +10,7 @@ body {
   width: 100%;
   background-color: #000;
   overflow: hidden;
+  z-index: 4;
 }
 
 .topnav h1, h2 {
@@ -65,24 +67,25 @@ h4 {
   display: block;
   z-index: 1;
 }
+
 .pullupmove, .pullupfixed {
   border-radius: 24px 24px 0px 0px;
   margin: auto;
-  width: 120px;
+  width: 150px;
   background: #f00;
   z-index: 2;
 }
 
 .pullupmove {
   position: relative;
-  margin-top: -49px;
+  margin-top: -60px;
 }
 
 .pullupfixed {
-  left: calc(50vw - 60px);
+  left: calc(50vw - 75px);
   position: fixed;
   overflow: hidden;
-  top: calc(100vh - 49px);
+  top: calc(100vh - 56.25px);
 }
 
 .inroute {
@@ -93,4 +96,20 @@ h4 {
 .bottom {
   width: 100%;
   background: #f00;
+}
+
+/* New route styles */
+input, select {
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  display: block;
+  border-width: 20px;
+  border-color: #f00;
+  border-style: solid;
+  border-radius: 1px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  padding: 10px;
+  text-decoration: none;
+  font-size: 64px;
 }

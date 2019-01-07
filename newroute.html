@@ -13,12 +13,28 @@
 
   </head>
   <body>
+    <!--  Hidden Image  -->
+    <img src="wall.jpg" width="0" height="0" id="img">
+
     <!--  Menu Bar  -->
-    <div class="topnav">
+    <div class="topnav" id="topnav">
       <h1>BEA 45° Wall</h1>
       <h2 class="arrow" onclick="openIndex()">◀︎</a>
     </div>
 
     <!--  Page Content  -->
+    <canvas class="viewcanvas" id="viewcanvas" width="0" height="0"></canvas>
+    <div class="pullupfixed" id="pullup" onclick="scrollToBottom()">
+      <img src="upArrow.png" width="150" height="56.25" id="img">
+    </div>
+    <div class="inroute" id="inroute">
+      <form id="routeform">
+        <input type="text" name="name" placeholder="Route Name">
+        <input type="text" name="setter" placeholder="Setter">
+        <input type="text" name="grade" placeholder="Grade">
+        <input type="submit" name="submit">
+      </form>
+    </div>
+    <div class="bottom" id="bottom"></div>
   </body>
 </html>
