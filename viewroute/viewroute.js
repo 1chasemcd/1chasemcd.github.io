@@ -44,7 +44,7 @@ function setup() {
 
 // Return to the main page.
 function openIndex() {
-  location.href='index.html';
+  location.href='../main/index.html';
 }
 
 // Slowly scroll to bottom on tab click.
