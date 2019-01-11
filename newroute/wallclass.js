@@ -1,3 +1,5 @@
+
+// Hold class and methods
 function Hold(x, y, type) {
   this.x = x;
   this.y = y;
@@ -8,9 +10,11 @@ Hold.prototype.dist = function(x, y) {
   return Math.sqrt(Math.pow(this.x - x, 2) + Math.pow(this.y - y, 2));
 }
 
+
+// Wall class and methods
 function Wall(canvas, bgImg) {
-  this.start = 0;
-  this.normal = 1;
+  this.normal = 0;
+  this.start = 1;
   this.end = 2;
 
   this.radius = 0.03;
@@ -20,7 +24,7 @@ function Wall(canvas, bgImg) {
 
   // Setup wall
   this.ctx = this.canvas.getContext("2d");
-  this.draw()
+  this.draw();
 }
 
 Wall.prototype.changeCanvas = function(canvas) {
@@ -31,9 +35,13 @@ Wall.prototype.changeCanvas = function(canvas) {
 
 Wall.prototype.update = function(x, y) {
   if (this.holdAt(x, y)) {
-    this.remove(x, y);
+    this.holdAt(x, y).type ++;
+
+    if (this.holdAt(x, y).type > 2) {
+      this.remove(x, y);
+    }
   } else {
-    this.add(new Hold(x, y, 1));
+    this.add(new Hold(x, y, 0));
   }
 }
 
@@ -73,7 +81,7 @@ Wall.prototype.remove = function(x, y) {
 Wall.prototype.holdAt = function(x, y) {
   for (var i = 0; i < this.holds.length; i++) {
     if (this.holds[i].dist(x, y) <= this.radius) {
-      return true;
+      return this.holds[i];
     }
   }
 

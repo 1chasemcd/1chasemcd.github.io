@@ -1,4 +1,5 @@
 window.addEventListener('resize', function(event){onChange()});
+window.addEventListener('orientationchange', function(event){onChange()});
 window.addEventListener("load", function() {onLoad()}, false);
 
 var topNav;
@@ -60,6 +61,9 @@ function onChange() {
   if (window.innerHeight > canvas.height + topNav.offsetHeight){
     pullup.classList.add("pullupmove");
     pullup.classList.remove("pullupfixed");
+  } else {
+    pullup.classList.remove("pullupmove");
+    pullup.classList.add("pullupfixed");
   }
   window.onscroll = function() {
     if (window.pageYOffset > stickyY) {
