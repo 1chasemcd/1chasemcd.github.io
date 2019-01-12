@@ -1,7 +1,9 @@
 window.addEventListener('resize', function(event){setup()});
+window.addEventListener('orientationchange', function(event){setup()});
 window.addEventListener("load", function() {setup()}, false);
 
 function setup() {
+  reloadCss();
   //Locate HTML elements
   var topNav = document.getElementById("topnav");
   var canvas = document.getElementById("viewcanvas");
@@ -40,6 +42,17 @@ function setup() {
   } else {
     lowDiv.style.height = "0px";
   }
+}
+
+function reloadCss()
+{
+    var links = document.getElementsByTagName("link");
+    for (var cl in links)
+    {
+        var link = links[cl];
+        if (link.rel === "stylesheet")
+            link.href += "";
+    }
 }
 
 // Return to the main page.

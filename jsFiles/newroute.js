@@ -42,6 +42,8 @@ function onLoad() {
 }
 
 function onChange() {
+
+  reloadCss();
   // Setup canvas
   canvas.style.marginTop = topNav.offsetHeight - 20 + "px";
   canvas.width = window.innerWidth;
@@ -82,6 +84,17 @@ function onChange() {
   } else {
     lowDiv.style.height = "0px";
   }
+}
+
+function reloadCss()
+{
+    var links = document.getElementsByTagName("link");
+    for (var cl in links)
+    {
+        var link = links[cl];
+        if (link.rel === "stylesheet")
+            link.href += "";
+    }
 }
 
 // Return to the main page.

@@ -81,14 +81,14 @@ h4 {
 
 .pullupmove {
   position: relative;
-  margin-top: -61px;
+  margin-top: -63px;
 }
 
 .pullupfixed {
   left: calc(50vw - 75px);
   position: fixed;
   overflow: hidden;
-  top: calc(100vh - 65px);
+  top: calc(100vh - 55px);
 }
 
 .inroute {
