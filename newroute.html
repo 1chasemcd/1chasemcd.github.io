@@ -4,17 +4,19 @@
     <meta charset="utf-8">
     <title>BEA 45° Wall</title>
 
-    <script src="viewroute.js"></script>
-    <link rel="stylesheet" href="../main/styles.css">
+    <script src="jsFiles/wallclass.js"></script>
+    <script src="jsFiles/newroute.js"></script>
+    <link rel="stylesheet" href="main/styles.css">
 
-    <link rel="apple-touch-icon" href="../main/appIcon.png"/>
+    <link rel="apple-touch-icon" href="main/appIcon.png"/>
+    <link rel="apple-touch-startup-image" href="main/appIcon.png">
     <meta name="apple-mobile-web-app-capable" content="yes"/>
     <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
 
   </head>
   <body>
     <!--  Hidden Image  -->
-    <img src="../main/wall.png" width="0" height="0" id="img">
+    <img src="main/wall.png" width="0" height="0" id="img">
 
     <!--  Menu Bar  -->
     <div class="topnav" id="topnav">
@@ -25,12 +27,15 @@
     <!--  Page Content  -->
     <canvas class="viewcanvas" id="viewcanvas" width="0" height="0"></canvas>
     <div class="pullupfixed" id="pullup" onclick="scrollToBottom()">
-      <img src="../main/upArrow.png" width="150" height="56.25" id="img">
+      <img src="main/upArrow.png" width="150" height="56.25" id="img">
     </div>
     <div class="inroute" id="inroute">
-      <h3>Route Name</h3>
-      <h4>Setter: Setter</h4>
-      <h4>Grade: v0</h4>
+      <form id="routeform">
+        <input type="text" name="name" placeholder="Route Name">
+        <input type="text" name="setter" placeholder="Setter">
+        <input type="text" name="grade" placeholder="Grade">
+        <input type="submit" name="submit">
+      </form>
     </div>
     <div class="bottom" id="bottom"></div>
   </body>

@@ -11,7 +11,7 @@ function setup() {
   var lowDiv = document.getElementById("bottom");
 
   // Setup canvas
-  canvas.style.marginTop = topNav.offsetHeight - 17 + "px";
+  canvas.style.marginTop = topNav.offsetHeight - 20 + "px";
   canvas.width = window.innerWidth;
   canvas.height = window.innerWidth * (943/700);
   var ctx = canvas.getContext("2d");
@@ -44,7 +44,7 @@ function setup() {
 
 // Return to the main page.
 function openIndex() {
-  location.href='../main/index.html';
+  location.href='index.html';
 }
 
 // Slowly scroll to bottom on tab click.

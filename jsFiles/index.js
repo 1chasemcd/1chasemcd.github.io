@@ -9,9 +9,9 @@ function setup() {
 }
 
 function openRoute() {
-  location.href='../viewroute/viewroute.html';
+  location.href='viewroute.html';
 }
 
 function openNew() {
-  location.href='../newroute/newroute.html';
+  location.href='newroute.html';
 }
