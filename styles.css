@@ -171,7 +171,6 @@ input {
 @media only screen and (max-width: 600px){
 
   .form {
-    position: relative;
     height: 400px;
   }
 }
