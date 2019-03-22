@@ -12,6 +12,10 @@ header {
   margin: 10px;
 }
 
+a {
+  color: #f80012;
+}
+
 .headImg {
   float: left;
   height: 12vh;
@@ -28,9 +32,13 @@ h1.largeScreen, h1.smallScreen {
 
 h1.smallScreen {
   display: none;
+  font-size: calc(8vh - 0.075*(105vh - 100vw));
+  margin: calc(3vh + 0.04*(105vh - 100vw));
+  margin-left: 1vw;
+  margin-right: 1vw;
 }
 
-@media only screen and (max-width: 700px){
+@media only screen and (max-width: 800px){
 
   h1.largeScreen {
     display: none;
@@ -165,7 +173,7 @@ input {
 
 .form {
   width: 100%;
-  height: calc(40vw - 20vh);
+  height: 40vh;
 }
 
 @media only screen and (max-width: 600px){
