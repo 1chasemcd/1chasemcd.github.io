@@ -32,10 +32,9 @@ h1.largeScreen, h1.smallScreen {
 
 h1.smallScreen {
   display: none;
-  font-size: calc(8vh - 0.075*(105vh - 100vw));
-  margin: calc(3vh + 0.04*(105vh - 100vw));
-  margin-left: 1vw;
-  margin-right: 1vw;
+  font-size: 6vh;
+  margin: calc(3.4vh + 0.04*(105vh - 100vw));
+  margin: 3.8vh 1vw
 }
 
 @media only screen and (max-width: 800px){
