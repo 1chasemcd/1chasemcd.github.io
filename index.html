@@ -1,159 +1,338 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
-    <!--Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-136812778-1"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+    <meta charset="utf-8">
+    <title>WebGL Test</title>
 
-      gtag('config', 'UA-136812778-1');
+    <script id="vs" type="notjs">
+
+      // an attribute will receive data from a buffer
+      attribute vec4 a_position;
+
+      // all shaders have a main function
+      void main() {
+
+        // gl_Position is a special variable a vertex shader
+        // is responsible for setting
+        gl_Position = a_position;
+      }
     </script>
 
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width">
-    <title>CC Code Camp</title>
+    <script id="spheres" type="notjs">
+      precision mediump float;
+
+      // Uniforms for camera position and resolution
+      uniform vec2 u_resolution;
+      uniform vec3 u_cameraPos;
+      uniform vec3 u_cameraAngle;
+
+      // Constants
+      const float max = 400.0;
+      const float fov = 3.14159/4.0;
+
+      // The signed distance function (distance estimator) for the displayed shape
+      float sdf(in vec3 z)
+      {
+        return length(mod(z, 50.0) - vec3(25.0)) - 10.0;
+      }
+
+      // the 3d angle to travel based on a 2d coordinate
+      vec4 getAngle(in vec2 coord)
+      {
+        float z = -u_resolution.x / 2.0 / tan(fov / 2.0);
+        return normalize(vec4(coord.xy, z, 0.0));
+      }
+
+      // the distance of the nearedst surface traveling in a direction from the camera position
+      float surfaceDist(in vec3 dir)
+      {
+        float dist = 0.0;
+        float totalDist = 0.0;
+
+        for (int i = 0; i < int(max / 8.0); i++)
+        {
+          vec3 pos = u_cameraPos + dir * totalDist;
+          dist = sdf(pos);
+          totalDist += dist;
+
+          // 0.1 is close enough for accuracy
+          if (dist < 1.0 || totalDist >= max)
+          {
+            break;
+          }
+        }
+
+        return totalDist;
+      }
+
+      mat4 viewMatrix(vec3 eye, vec3 center, vec3 up) {
+        // Based on gluLookAt man page
+        vec3 f = normalize(center - eye);
+        vec3 s = normalize(cross(f, up));
+        vec3 u = cross(s, f);
+        return mat4(
+          vec4(s, 0.0),
+          vec4(u, 0.0),
+          vec4(-f, 0.0),
+          vec4(0.0, 0.0, 0.0, 1)
+        );
+      }
+
+      void main()
+      {
+        vec2 coord = gl_FragCoord.xy - u_resolution / 2.0;
+        vec4 coordDir = getAngle(coord);
+        mat4 transformDir = viewMatrix(u_cameraPos, u_cameraPos + u_cameraAngle, vec3(0, 1.0, 0));
+        vec3 dir = (transformDir * coordDir).xyz;
+
+        float dist = surfaceDist(dir);
+
+        if (dist < max)
+        {
+          gl_FragColor = vec4(1.0 - (dist / max) * 0.5, (dist / max) * 0.5, (dist / max) * 0.5, 1);
+        }
+        else
+        {
+          gl_FragColor = vec4(0.5, 0.5, 0.5, 1);
+        }
+      }
+    </script>
+    <script id="shadows" type="notjs">
+      precision mediump float;
+
+      // Uniforms for camera position and resolution
+      uniform vec2 u_resolution;
+      uniform vec3 u_cameraPos;
+      uniform vec3 u_cameraAngle;
+
+      // Constants
+      const float max = 400.0;
+      const float fov = 3.14159/2.0;
+
+      // Distance estimator of a sphere
+      float sphere(in vec3 z, out vec4 c)
+      {
+        c = vec4(1, 0, 0, 1);
+        return length(z) - 10.0;
+      }
+
+      // Distance estimator for the ground
+      float ground(in vec3 z, out vec4 c)
+      {
+        c = vec4(0.5, 0.5, 0.5, 1);
+        return z.y + 10.0;
+      }
+
+      // Distance estimator for all shapes combined
+      float sdf(in vec3 z, out vec4 c)
+      {
+        if (sphere(z, c) == min(sphere(z, c), ground(z, c)))
+        {
+          return sphere(z, c);
+        }
+        else
+        {
+          return ground(z, c);
+        }
+      }
+
+      // Function to fade between two colors and smooth color transitions
+      vec4 fade(in vec4 c1, in vec4 c2, in float value)
+      {
+        vec4 scale = c2 - c1;
+        return c1 + scale * value;
+      }
+
+      // the 3d normalized vector to travel based on a 2d coordinate
+      vec4 getAngle(in vec2 coord)
+      {
+        float z = -u_resolution.x / 2.0 / tan(fov / 2.0);
+        return normalize(vec4(coord.xy, z, 0.0));
+      }
+
+      // the distance of the nearest surface traveling in a direction from the camera position
+      float surfaceDist(in vec3 start, in vec3 dir, in float tolerance, out vec4 c)
+      {
+        float dist = 0.0;
+        float totalDist = 0.0;
+
+        for (int i = 0; i < int(max / 8.0); i++)
+        {
+          vec3 pos = start + dir * totalDist;
+          dist = sdf(pos, c);
+          totalDist += dist;
+
+          // 0.1 is close enough for accuracy
+          if (dist < tolerance || totalDist >= max)
+          {
+            break;
+          }
+        }
+
+        return totalDist;
+      }
+
+      // Surface distance without the color variable
+      float surfaceDist(in vec3 start, in vec3 dir, in float tolerance)
+      {
+        vec4 c;
+        return surfaceDist(start, dir, tolerance, c);
+      }
+
+      // Returns a matrix to transform scene based on position and angle to point at
+      mat4 viewMatrix(vec3 eye, vec3 center, vec3 up) {
+        // Based on gluLookAt man page
+        vec3 f = normalize(center - eye);
+        vec3 s = normalize(cross(f, up));
+        vec3 u = cross(s, f);
+        return mat4(
+          vec4(s, 0.0),
+          vec4(u, 0.0),
+          vec4(-f, 0.0),
+          vec4(0.0, 0.0, 0.0, 1)
+        );
+      }
+
+      // Main funaction executes all code por a single point
+      void main()
+      {
+        vec2 coord = gl_FragCoord.xy - u_resolution / 2.0;
+        vec4 coordDir = getAngle(coord);
+        mat4 transformDir = viewMatrix(u_cameraPos, u_cameraPos + u_cameraAngle, vec3(0, 1.0, 0));
+        vec3 dir = (transformDir * coordDir).xyz;
+        vec4 c;
+
+        float dist = surfaceDist(u_cameraPos, dir, 0.01, c);
+
+        if (dist < max) // Intersection with shape
+        {
+          vec3 surfacePoint = u_cameraPos + dir * dist - dir;
+          vec3 sunAngle = normalize(vec3(0.5, 1, 0));
+          float shadow = surfaceDist(surfacePoint, sunAngle, 0.001);
+
+          if (shadow < max) // Point in shadow
+          {
+            gl_FragColor = vec4(0, 0, 0, 1);
+          }
+          else // Point not in shadow
+          {
+            gl_FragColor = fade(c, vec4(0.5, 0.7, 0.9, 1), dist / max);
+          }
+        }
+        else // Point not hit
+        {
+          gl_FragColor = vec4(0.5, 0.7, 0.9, 1);
+        }
+      }
+    </script>
+    <script id="fs" type="notjs">
+      precision mediump float;
+
+      // Uniforms for camera position and resolution
+      uniform vec2 u_resolution;
+      uniform vec3 u_cameraPos;
+      uniform vec3 u_cameraAngle;
+
+      // Constants
+      const float max = 20.0;
+      const float fov = 3.14159/2.0;
+
+      // Distance estimator for all shapes combined
+      float sdf(in vec3 p)
+      {
+        // If d.x < 0, then -1 < p.x < 1, and same logic applies to p.y, p.z
+        // So if all components of d are negative, then p is inside the unit cube
+        vec3 d = abs(p) - vec3(1.0, 1.0, 1.0);
+
+        // Assuming p is inside the cube, how far is it from the surface?
+        // Result will be negative or zero.
+        float insideDistance = min(max(d.x, max(d.y, d.z)), 0.0);
+
+        // Assuming p is outside the cube, how far is it from the surface?
+        // Result will be positive or zero.
+        float outsideDistance = length(max(d, 0.0));
+
+        return insideDistance + outsideDistance;
+      }
+
+      // Function to fade between two colors and smooth color transitions
+      vec4 fade(in vec4 c1, in vec4 c2, in float value)
+      {
+        vec4 scale = c2 - c1;
+        return c1 + scale * value;
+      }
+
+      // the 3d normalized vector to travel based on a 2d coordinate
+      vec4 getAngle(in vec2 coord)
+      {
+        float z = -u_resolution.x / 2.0 / tan(fov / 2.0);
+        return normalize(vec4(coord.xy, z, 0.0));
+      }
+
+      // the distance of the nearest surface traveling in a direction from the camera position
+      float surfaceDist(in vec3 start, in vec3 dir, in float tolerance)
+      {
+        float dist = 0.0;
+        float totalDist = 0.0;
+
+        for (int i = 0; i < int(max / 8.0); i++)
+        {
+          vec3 pos = start + dir * totalDist;
+          dist = sdf(pos);
+          totalDist += dist;
+
+          // 0.1 is close enough for accuracy
+          if (dist < tolerance || totalDist >= max)
+          {
+            break;
+          }
+        }
+
+        return totalDist;
+      }
+
+      // Returns a matrix to transform scene based on position and angle to point at
+      mat4 viewMatrix(vec3 eye, vec3 center, vec3 up) {
+        // Based on gluLookAt man page
+        vec3 f = normalize(center - eye);
+        vec3 s = normalize(cross(f, up));
+        vec3 u = cross(s, f);
+        return mat4(
+          vec4(s, 0.0),
+          vec4(u, 0.0),
+          vec4(-f, 0.0),
+          vec4(0.0, 0.0, 0.0, 1)
+        );
+      }
+
+      // Main funaction executes all code por a single point
+      void main()
+      {
+        vec2 coord = gl_FragCoord.xy - u_resolution / 2.0;
+        vec4 coordDir = getAngle(coord);
+        mat4 transformDir = viewMatrix(u_cameraPos, u_cameraPos + u_cameraAngle, vec3(0, 1.0, 0));
+        vec3 dir = (transformDir * coordDir).xyz;
+
+        float dist = surfaceDist(u_cameraPos, dir, 0.01);
+
+        if (dist < max) // Intersection with shape
+        {
+          gl_FragColor = fade(vec4(1, 0, 0, 1), vec4(0.5, 0.7, 0.9, 1), dist / max);
+        }
+        else // Point not hit
+        {
+          gl_FragColor = vec4(0.5, 0.7, 0.9, 1);
+        }
+      }
+    </script>
+
+
     <link rel="stylesheet" href="styles.css">
   </head>
-
   <body>
-
-    <header>
-      <img src="Images/CCLogo.png" alt="Code Camp Logo" class="headImg">
-      <h1 class="largeScreen">Chase and Claire's Code Camp</h1>
-      <h1 class="smallScreen">CC Code Camp</h1>
-    </header>
-
-    <div class="section">
-      <div class="column">
-        <div class="pbox">
-          <h2>Want to learn to code?</h2>
-          <p>This summer camp is meant to be a fun easy introduction to coding for students in Bend, Oregon.
-            Throughout the four days of camp, we will be using multiple coding apps and educational
-            tools that will teach kids the fundamentals of coding. All of
-            the necessary technology will be provided. Camps take place from Monday
-            through Thursday. Half way through each camp there
-            will be an included snack. If you have any other questions about the
-            schedule, please don't hesitate to email us at
-            <a href="mailto:1chasemcd@gmail.com">1chasemcd@gmail.com</a>.</p>
-        </div>
-      </div>
-      <div class="column">
-        <div class="rboxnp">
-          <img src="Images/spheroComp.jpg" alt="Sphero Competition" class="img">
-        </div>
-      </div>
-    </div>
-
-    <div class="section">
-      <div class="pbox">
-        <h2>Meet Us</h2>
-      </div>
-      <div class="column">
-        <div class="rbox">
-          <h2>Chase</h2>
-          <p>I am a Sophomore at Summit High School. I have taken classes on
-            computer science, and have made online tutorials for coding. I have
-            also participated on Summit's robotics team, where I work with a team
-            to program robots. I know the programing languages Java,
-            Python, HTML, CSS, JavaScript, and many others. I also designed this
-            website using HTML and CSS. I am very excited to share my interest
-            in computer science with other kids.
-          </p>
-        </div>
-      </div>
-      <div class="column">
-        <div class="rbox">
-          <h2>Claire</h2>
-          <p>I am an eighth grader at Cascade middle school. Chase is my older
-            brother, and he has taught me a lot about coding. When I was younger,
-            I used an app called Hopscotch to learn to code. I was always proud
-            when I was able to start from scratch and make a computer draw
-            something, or make a stick figure move. I had lots of help from my
-            older brother. With this creation of this camp, I am hopeful that
-            other children will have this same experience and be able to enjoy
-            coding!</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="section">
-      <div class="column">
-        <div class="rboxnp">
-          <img src="Images/welcomeRoom.jpg" alt="Sphero Competition" class="img">
-        </div>
-      </div>
-
-      <div class="column">
-        <div class="rboxnp">
-          <img src="Images/mindstorms.jpg" alt="Sphero Competition" class="img">
-        </div>
-      </div>
-    </div>
-
-    <div class="section">
-      <div class="pbox">
-        <h2>Programs</h2>
-      </div>
-      <div class="column">
-        <div class="rbox">
-          <h2>Intro to Programming</h2>
-          <p>In this program, Bend, Oregon students grades 2 to 5 will gain basic knowledge on
-            coding. We will start by using a simple language called Scratch to
-            learn about the basic tools of coding. Scratch uses
-            colorful blocks of code that can be used together to create games.
-            This will teach the concepts involved in all programing languages,
-            while avoiding the complex syntax used in written programming
-            languages like Java and Python. After kids learn the basics of
-            programming, they will use their new skills to program robots such as
-            spheros, Lego Mindstorms robots, and more!</p>
-        </div>
-      </div>
-      <div class="column">
-        <div class="rbox">
-          <h2>Code Camp 2</h2>
-          <p>In our second offered program, Bend, Oregon students grades 3 to 6 will have the opportunity
-             to build off of what they learned in the previous program. We will start
-             by reviewing what was learned in the introductory course, then jump right
-             back into programming with the language Scratch. This time, kids will learn
-             more advanced skill to use when making fun games. All of the skills
-             learned using this language will then be applied to programming robots,
-             such as Lego Mindstorms and spheros, which both provide a fun way to use
-             computer skills. This more advanced camp will be a blast for kids that
-          love to code!</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="section">
-      <div class="pbox">
-        <h2>Sign Up</h2>
-      </div>
-      <div class="column">
-        <div class="pbox">
-          <p>Sessions:<br>
-             Intro to Programming: July 29 - August 1, 9:00am - 12:00pm<br><br>
-             Code Camp 2: July 29 - August 1, 1:00pm - 4:00pm<br><br>
-             More dates will be added if interest is shown<br><br>
-
-             Cost: $100<br>
-             This can be paid in cash or check at the camp
-          </p>
-        </div>
-      </div>
-
-      <div class="column">
-        <div class="pbox">
-          <iframe class="form" src="https://docs.google.com/forms/d/e/1FAIpQLSc48xesvU8ylMB5ehP3aDaEUO6mhXrSe0UW0wJXuCOWR7JC3g/viewform?embedded=true" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>
-        </div>
-      </div>
-    </div>
-
+    <canvas id="canvas"></canvas>
+    <script src="vector.js"></script>
+    <script src="shadersetup.js"></script>
+    <script src="script.js"></script>
   </body>
 </html>
-
-<!--
-  July 29 - August 2
-
--->
