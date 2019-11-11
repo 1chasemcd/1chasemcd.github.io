@@ -9,6 +9,7 @@ var then = 0;
 var delta = 0;
 var prevTouchX, prevTouchY;
 var startDiv = document.getElementById('start');
+var arrow = document.getElementById('arrow');
 
 // Get A WebGL context
 var canvas = document.getElementById("canvas");
@@ -85,18 +86,36 @@ function mouseMoved(e)
 
 function touchMoved(e)
 {
-  var x = -e.touches[0].clientX;
-  var y = -e.touches[0].clientY;
-  angleChange((x - prevTouchX) / 1000, (y - prevTouchY) / 1000);
+  e.preventDefault();
 
-  prevTouchX = x;
-  prevTouchY = y;
+  for (var i = 0; i < e.touches.length; i++) {
+    if (e.touches[i].target.id != 'arrow') {
+      var x = -e.touches[0].clientX;
+      var y = -e.touches[0].clientY;
+      angleChange((x - prevTouchX) / 1000, (y - prevTouchY) / 1000);
+
+      prevTouchX = x;
+      prevTouchY = y;
+      return;
+    }
+  }
 }
 
-function touchStarted(e)
-{
+function touchStarted(e) {
+  for (var i = 0; i < e.touches.length; i++) {
+    if (e.touches[i].target.id == 'arrow') {
+      velocity = cameraAngle.toVec();
+      on = true;
+      return;
+    }
+  }
   prevTouchX = -e.touches[0].clientX;
   prevTouchY = -e.touches[0].clientY;
+}
+
+function touchEnded(e)
+{
+  on = false;
 }
 
 function angleChange(x, y)
@@ -167,10 +186,12 @@ function start(e) {
   document.removeEventListener('touchstart', start, false);
 
   if (touchScreen == true) {
-    startDiv.style.top = '150vh';
     touchStarted(e);
+    startDiv.style.display = 'none';
+    arrow.style.display = 'block';
     document.addEventListener("touchstart", touchStarted, false);
-    document.addEventListener("touchmove", touchMoved, false);
+    document.addEventListener("touchmove", touchMoved, {passive: false});
+    document.addEventListener("touchend", touchEnded, false);
 
   } else {
     // Hook pointer lock state change events for different browsers
