@@ -7,10 +7,30 @@ var velocity = new Vector();
 var on = false;
 var then = 0;
 var delta = 0;
+var prevTouchX, prevTouchY;
+var startDiv = document.getElementById('start');
 
-function drawScene(now)
-{
-  delta = now - then;
+// Get A WebGL context
+var canvas = document.getElementById("canvas");
+var gl = canvas.getContext("webgl");
+if (!gl) {
+  console.log("error: No webgl")
+}
+
+canvas.requestPointerLock = canvas.requestPointerLock ||
+                            canvas.mozRequestPointerLock;
+
+document.exitPointerLock = document.exitPointerLock ||
+                           document.mozExitPointerLock;
+
+canvas.requestFullScreen = canvas.requestFullScreen ||
+                           canvas.webkitRequestFullScreen;
+
+function drawScene(now) {
+  if (now != null)
+  {
+    delta = now - then;
+  }
   resize(canvas);
   gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
@@ -36,61 +56,66 @@ function drawScene(now)
   var count = 6;
   gl.drawArrays(primitiveType, offset, count);
 
-  then = now;
-  requestAnimationFrame(drawScene);
+  if (now != null)
+  {
+    then = now;
+    requestAnimationFrame(drawScene);
+  }
 }
 
 function lockChange() {
- if (document.pointerLockElement === canvas ||
-     document.mozPointerLockElement === canvas) {
-   document.addEventListener("mousemove", mouseMoved, false);
- } else {
-   document.removeEventListener("mousemove", mouseMoved, false);
- }
+  if (document.pointerLockElement === canvas ||
+  document.mozPointerLockElement === canvas) {
+    document.addEventListener("mousemove", mouseMoved, false);
+  } else {
+    document.removeEventListener("mousemove", mouseMoved, false);
+
+  }
+}
+
+function fullScreen() {
+  canvas.requestFullScreen();
+  canvas.requestPointerLock();
 }
 
 function mouseMoved(e)
 {
-  cameraAngle.x -= e.movementX / 400;
+   angleChange(e.movementX / 400, e.movementY / 400);
+}
 
-   if (cameraAngle.y >= Math.PI / 4 && e.movementY > 0)
+function touchMoved(e)
+{
+  var x = -e.touches[0].clientX;
+  var y = -e.touches[0].clientY;
+  angleChange((x - prevTouchX) / 1000, (y - prevTouchY) / 1000);
+
+  prevTouchX = x;
+  prevTouchY = y;
+}
+
+function touchStarted(e)
+{
+  prevTouchX = -e.touches[0].clientX;
+  prevTouchY = -e.touches[0].clientY;
+}
+
+function angleChange(x, y)
+{
+  cameraAngle.x -= x;
+
+   if (cameraAngle.y >= Math.PI / 2 - 0.001 && y > 0)
    {
-     cameraAngle.y = Math.PI / 4;
+     cameraAngle.y = Math.PI / 2 - 0.001;
    }
-   else if (cameraAngle.y <= -Math.PI / 4 && e.movementY < 0)
+   else if (cameraAngle.y <= -Math.PI / 2 + 0.001 && y < 0)
    {
-     cameraAngle.y = -Math.PI / 4;
+     cameraAngle.y = -Math.PI / 2 + 0.001;
    }
    else
    {
-     cameraAngle.y += e.movementY / 400;
+     cameraAngle.y += y;
    }
 }
-
-// Get A WebGL context
-var canvas = document.getElementById("canvas");
-var gl = canvas.getContext("webgl");
-if (!gl) {
-  console.log("error: No webgl")
-}
-
-canvas.requestPointerLock = canvas.requestPointerLock ||
-                            canvas.mozRequestPointerLock;
-
-document.exitPointerLock = document.exitPointerLock ||
-                           document.mozExitPointerLock;
-
-canvas.requestFullScreen = canvas.requestFullScreen ||
-                           canvas.webkitRequestFullScreen;
-
-// Hook pointer lock state change events for different browsers
-document.addEventListener('pointerlockchange', lockChange, false);
-document.addEventListener('mozpointerlockchange', lockChange, false);
-
-canvas.onclick = function() {
-  canvas.requestFullScreen();
-  canvas.requestPointerLock();
-};
 
 document.onkeydown = function(e) {
     e = e || window.event;
@@ -121,7 +146,6 @@ document.onkeydown = function(e) {
       on = true;
     }
 };
-
 document.onkeyup = function(e) {
     e = e || window.event;
     var charCode = e.keyCode || e.which;
@@ -135,4 +159,30 @@ document.onkeyup = function(e) {
 };
 
 main();
-requestAnimationFrame(drawScene);
+drawScene();
+
+function start(e) {
+  var touchScreen = e instanceof TouchEvent;
+  document.removeEventListener('click', start, false);
+  document.removeEventListener('touchstart', start, false);
+
+  if (touchScreen == true) {
+    startDiv.style.top = '150vh';
+    touchStarted(e);
+    document.addEventListener("touchstart", touchStarted, false);
+    document.addEventListener("touchmove", touchMoved, false);
+
+  } else {
+    // Hook pointer lock state change events for different browsers
+    document.addEventListener('pointerlockchange', lockChange, false);
+    document.addEventListener('mozpointerlockchange', lockChange, false);
+
+    fullScreen();
+    document.addEventListener('click', fullScreen, false);
+  }
+
+  requestAnimationFrame(drawScene);
+}
+
+document.addEventListener("touchstart", start, false);
+document.addEventListener("click", start, false);

@@ -7,3 +7,40 @@ canvas {
   height: 100vh;
   display: block;
 }
+
+#start {
+  position: absolute;
+  background-color: #808080;
+  border-style: solid;
+  border-color: #000;
+  border-width: 0.5vmin;
+  width: 49vmin;
+  top: calc(50% - 12.5vmin/2);
+  left: calc(50% - 25vmin);
+
+}
+
+h1, a {
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  font-size: 4vmin;
+  color: #000;
+  text-align: center;
+  width: 100%;
+  margin-top: 2vmin;
+  margin-bottom: 2vmin;
+}
+
+@media only screen and (max-width: 6in){
+  #start {
+    border-width: 1vmin;
+    width: 98vmin;
+    top: calc(50% - 25vmin/2);
+    left: calc(50% - 50vmin);
+  }
+
+  h1 {
+    font-size: 8vmin;
+    margin-top: 4vmin;
+    margin-bottom: 4vmin;
+  }
+}
