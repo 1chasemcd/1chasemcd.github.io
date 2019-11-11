@@ -80,12 +80,15 @@ canvas.requestPointerLock = canvas.requestPointerLock ||
 document.exitPointerLock = document.exitPointerLock ||
                            document.mozExitPointerLock;
 
+canvas.requestFullScreen = canvas.requestFullScreen ||
+                           canvas.webkitRequestFullScreen;
+
 // Hook pointer lock state change events for different browsers
 document.addEventListener('pointerlockchange', lockChange, false);
 document.addEventListener('mozpointerlockchange', lockChange, false);
 
 canvas.onclick = function() {
-  canvas.webkitRequestFullScreen();
+  canvas.requestFullScreen();
   canvas.requestPointerLock();
 };
 
