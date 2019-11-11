@@ -106,16 +106,19 @@ function touchStarted(e) {
     if (e.touches[i].target.id == 'arrow') {
       velocity = cameraAngle.toVec();
       on = true;
-      return;
+    }
+    else {
+      prevTouchX = -e.touches[0].clientX;
+      prevTouchY = -e.touches[0].clientY;
     }
   }
-  prevTouchX = -e.touches[0].clientX;
-  prevTouchY = -e.touches[0].clientY;
 }
 
 function touchEnded(e)
 {
-  on = false;
+  if (e.target.id == 'arrow') {
+    on = false;
+  }
 }
 
 function angleChange(x, y)
