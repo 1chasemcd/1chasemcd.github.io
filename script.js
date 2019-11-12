@@ -90,25 +90,27 @@ function touchMoved(e)
 
   for (var i = 0; i < e.touches.length; i++) {
     if (e.touches[i].target.id != 'arrow') {
-      var x = -e.touches[0].clientX;
-      var y = -e.touches[0].clientY;
+      var x = -e.touches[i].clientX;
+      var y = -e.touches[i].clientY;
       angleChange((x - prevTouchX) / 700, (y - prevTouchY) / 700);
 
       prevTouchX = x;
       prevTouchY = y;
+      return;
     }
   }
 }
 
 function touchStarted(e) {
+  console.log(e);
   for (var i = 0; i < e.touches.length; i++) {
     if (e.touches[i].target.id == 'arrow') {
       velocity = cameraAngle.toVec();
       on = true;
     }
     else {
-      prevTouchX = -e.touches[0].clientX;
-      prevTouchY = -e.touches[0].clientY;
+      prevTouchX = -e.touches[i].clientX;
+      prevTouchY = -e.touches[i].clientY;
     }
   }
 }
