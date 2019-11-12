@@ -88,6 +88,10 @@ function touchMoved(e)
 {
   e.preventDefault();
 
+  if (on) {
+    velocity = cameraAngle.toVec();
+  }
+
   for (var i = 0; i < e.touches.length; i++) {
     if (e.touches[i].target.id != 'arrow') {
       var x = e.touches[i].clientX;
