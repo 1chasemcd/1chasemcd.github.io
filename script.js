@@ -114,7 +114,7 @@ function touchMoved(e)
     if (e.touches[i].target.id != 'arrow') {
       var x = e.touches[i].clientX;
       var y = e.touches[i].clientY;
-      angleChange((x - prevTouchX) / 500, (y - prevTouchY) / 500);
+      angleChange((x - prevTouchX) / 300, (y - prevTouchY) / 300);
       prevTouchX = x;
       prevTouchY = y;
       return;
