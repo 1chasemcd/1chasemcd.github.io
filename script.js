@@ -3,8 +3,7 @@
 var resolutionUniformLocation, cameraPosUniformLocation, cameraAngleUniformLocation;
 var cameraPos = new Vector(0, 0, 30);
 var cameraAngle = new Vector(Math.PI, 0);
-var velocity = new Vector();
-var on = false;
+var dir = 0;
 var then = 0;
 var delta = 0;
 var prevTouchX, prevTouchY;
@@ -39,8 +38,31 @@ function drawScene(now) {
   gl.clearColor(0, 0, 0, 0);
   gl.clear(gl.COLOR_BUFFER_BIT);
 
-  if (on)
+  if (dir != 0)
   {
+    var velocity;
+
+    if (dir == 1)
+    {
+      velocity = cameraAngle.toVec();
+    }
+    else if (dir == 2)
+    {
+      var tempVel = new Vector(Math.PI / 2)
+      tempVel.add(new Vector(cameraAngle.x, 0))
+      velocity = tempVel.toVec().mult(0.5);
+    }
+    else if (dir == 3)
+    {
+      velocity = cameraAngle.toVec().mult(-1);
+    }
+    else if (dir == 4)
+    {
+      var tempVel = new Vector(-Math.PI / 2)
+      tempVel.add(cameraAngle)
+      velocity = tempVel.toVec().mult(0.5);
+    }
+
     cameraPos.add(velocity);
   }
 
@@ -93,22 +115,17 @@ function touchMoved(e)
       var x = e.touches[i].clientX;
       var y = e.touches[i].clientY;
       angleChange((x - prevTouchX) / 500, (y - prevTouchY) / 500);
-
       prevTouchX = x;
       prevTouchY = y;
       return;
     }
   }
-
-  velocity = cameraAngle.toVec();
 }
 
 function touchStarted(e) {
-  console.log(e);
   for (var i = 0; i < e.touches.length; i++) {
     if (e.touches[i].target.id == 'arrow') {
-      velocity = cameraAngle.toVec();
-      on = true;
+      dir = 1;
     }
     else {
       prevTouchX = e.touches[i].clientX;
@@ -120,7 +137,7 @@ function touchStarted(e) {
 function touchEnded(e)
 {
   if (e.target.id == 'arrow') {
-    on = false;
+    dir = 0;
   }
 }
 
@@ -148,27 +165,19 @@ document.onkeydown = function(e) {
     var char = String.fromCharCode(charCode);
     if (char == 'W' || char == 'w')
     {
-      velocity = cameraAngle.toVec();
-      on = true;
+      dir = 1;
     }
     else if (char == 'a' || char == 'A')
     {
-      var tempVel = new Vector(Math.PI / 2)
-      tempVel.add(new Vector(cameraAngle.x, 0))
-      velocity = tempVel.toVec().mult(0.5);
-      on = true;
+      dir = 2;
     }
     else if (char == 's' || char == 'S')
     {
-      velocity = cameraAngle.toVec().mult(-1);
-      on = true;
+      dir = 3;
     }
     else if (char == 'd' || char == 'D')
     {
-      var tempVel = new Vector(-Math.PI / 2)
-      tempVel.add(cameraAngle)
-      velocity = tempVel.toVec().mult(0.5);
-      on = true;
+      dir = 4;
     }
 };
 document.onkeyup = function(e) {
@@ -178,8 +187,7 @@ document.onkeyup = function(e) {
 
     if (char == 'w' || char == 'W'|| char == 'a' || char == 'A' || char == 's' || char == 'S' || char == 'd' || char == 'D')
     {
-      velocity.set(0, 0, 0);
-      on = false;
+      dir = 0;
     }
 };
 
