@@ -89,7 +89,6 @@ function touchMoved(e)
   e.preventDefault();
 
   if (on) {
-    velocity = cameraAngle.toVec();
   }
 
   for (var i = 0; i < e.touches.length; i++) {
@@ -142,6 +141,8 @@ function angleChange(x, y)
    {
      cameraAngle.y += y;
    }
+
+   velocity = cameraAngle.toVec();
 }
 
 document.onkeydown = function(e) {
