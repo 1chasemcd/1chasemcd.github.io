@@ -88,9 +88,6 @@ function touchMoved(e)
 {
   e.preventDefault();
 
-  if (on) {
-  }
-
   for (var i = 0; i < e.touches.length; i++) {
     if (e.touches[i].target.id != 'arrow') {
       var x = e.touches[i].clientX;
@@ -102,6 +99,8 @@ function touchMoved(e)
       return;
     }
   }
+
+  velocity = cameraAngle.toVec();
 }
 
 function touchStarted(e) {
@@ -141,8 +140,6 @@ function angleChange(x, y)
    {
      cameraAngle.y += y;
    }
-
-   velocity = cameraAngle.toVec();
 }
 
 document.onkeydown = function(e) {
