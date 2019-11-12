@@ -90,9 +90,9 @@ function touchMoved(e)
 
   for (var i = 0; i < e.touches.length; i++) {
     if (e.touches[i].target.id != 'arrow') {
-      var x = -e.touches[i].clientX;
-      var y = -e.touches[i].clientY;
-      angleChange((x - prevTouchX) / 700, (y - prevTouchY) / 700);
+      var x = e.touches[i].clientX;
+      var y = e.touches[i].clientY;
+      angleChange((x - prevTouchX) / 500, (y - prevTouchY) / 500);
 
       prevTouchX = x;
       prevTouchY = y;
@@ -109,8 +109,8 @@ function touchStarted(e) {
       on = true;
     }
     else {
-      prevTouchX = -e.touches[i].clientX;
-      prevTouchY = -e.touches[i].clientY;
+      prevTouchX = e.touches[i].clientX;
+      prevTouchY = e.touches[i].clientY;
     }
   }
 }
