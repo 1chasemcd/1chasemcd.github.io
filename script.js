@@ -92,11 +92,10 @@ function touchMoved(e)
     if (e.touches[i].target.id != 'arrow') {
       var x = -e.touches[0].clientX;
       var y = -e.touches[0].clientY;
-      angleChange((x - prevTouchX) / 1000, (y - prevTouchY) / 1000);
+      angleChange((x - prevTouchX) / 700, (y - prevTouchY) / 700);
 
       prevTouchX = x;
       prevTouchY = y;
-      return;
     }
   }
 }
