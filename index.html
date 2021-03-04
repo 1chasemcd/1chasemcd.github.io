@@ -1,118 +1,13 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title>RayMarching</title>
-
-    <script id="vs" type="notjs">
-
-      // an attribute will receive data from a buffer
-      attribute vec4 a_position;
-
-      // all shaders have a main function
-      void main() {
-
-        // gl_Position is a special variable a vertex shader
-        // is responsible for setting
-        gl_Position = a_position;
-      }
-    </script>
-    <script id="fs" type="notjs">
-      precision highp float;
-
-      // Uniforms for camera position and resolution
-      uniform vec2 u_resolution;
-      uniform vec3 u_cameraPos;
-      uniform vec3 u_cameraAngle;
-
-      // Constants
-      const float max = 400.0;
-      const float fov = 3.14159/4.0;
-
-      // The signed distance function (distance estimator) for the displayed shape
-      float sdf(in vec3 z)
-      {
-        return length(mod(z, 50.0) - vec3(25.0)) - 10.0;
-      }
-      
-      // the 3d angle to travel based on a 2d coordinate
-      vec4 getAngle(in vec2 coord)
-      {
-        float z = -u_resolution.x / 2.0 / tan(fov / 2.0);
-        return normalize(vec4(coord.xy, z, 0.0));
-      }
-
-      // the distance of the nearedst surface traveling in a direction from the camera position
-      float surfaceDist(in vec3 dir)
-      {
-        float dist = 0.0;
-        float totalDist = 0.0;
-
-        for (int i = 0; i < int(max / 8.0); i++)
-        {
-          vec3 pos = u_cameraPos + dir * totalDist;
-          dist = sdf(pos);
-          totalDist += dist;
-
-          // 0.1 is close enough for accuracy
-          if (dist < 1.0 || totalDist >= max)
-          {
-            break;
-          }
-        }
-
-        return totalDist;
-      }
-
-      mat4 viewMatrix(vec3 eye, vec3 center, vec3 up) {
-        // Based on gluLookAt man page
-        vec3 f = normalize(center - eye);
-        vec3 s = normalize(cross(f, up));
-        vec3 u = cross(s, f);
-        return mat4(
-          vec4(s, 0.0),
-          vec4(u, 0.0),
-          vec4(-f, 0.0),
-          vec4(0.0, 0.0, 0.0, 1)
-        );
-      }
-
-      void main()
-      {
-        vec2 coord = gl_FragCoord.xy - u_resolution / 2.0;
-        vec4 coordDir = getAngle(coord);
-        mat4 transformDir = viewMatrix(u_cameraPos, u_cameraPos + u_cameraAngle, vec3(0, 1.0, 0));
-        vec3 dir = (transformDir * coordDir).xyz;
-
-        float dist = surfaceDist(dir);
-
-        if (dist < max)
-        {
-          gl_FragColor = vec4(1.0 - (dist / max) * 0.5, (dist / max) * 0.5, (dist / max) * 0.5, 1);
-        }
-        else
-        {
-          gl_FragColor = vec4(0.5, 0.5, 0.5, 1);
-        }
-      }
-    </script>
-    <link rel="stylesheet" href="styles.css">
-
-    <!-- For Webclip -->
-    <link rel="apple-touch-icon" href="icon.png"/>
-    <meta name="apple-mobile-web-app-capable" content="yes"/>
-    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
-
-  </head>
-  <body unselectable="on" onselectstart="return false;" onmousedown="return false;">
-    <div id="start">
-      <h1>Tap Anywhere to Begin</h1>
-    </div>
-
-    <div id="arrow">▲</div>
-    <canvas id="canvas"></canvas>
-    <script src="vector.js"></script>
-    <script src="shadersetup.js"></script>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camera Test</title>
+</head>
+<body>
+    <video style="width: 1280px; height: 800px; background-color: #faa;"></video>
     <script src="script.js"></script>
-  </body>
+</body>
 </html>
